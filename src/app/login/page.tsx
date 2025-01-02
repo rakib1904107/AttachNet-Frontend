@@ -1,14 +1,19 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from 'next/navigation';
 
 export default function Login() {
+
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
 
     // Basic validation
     if (!email || !password) {
@@ -26,6 +31,31 @@ export default function Login() {
     // Send login data to the server or handle it
     console.log({ email, password });
     // You can integrate an API here
+
+    try {
+      const response = await fetch('http://localhost:8080/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password })
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        // Store user data or handle successful login
+        localStorage.setItem('userEmail', email);
+        localStorage.setItem('userPassword', password);
+        router.push('/dashboard'); // Redirect to dashboard
+      } else {
+        const errorData = await response.json();
+        setError(errorData.message || 'Login failed');
+      }
+    } catch (error) {
+      setError('Network error occurred');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (

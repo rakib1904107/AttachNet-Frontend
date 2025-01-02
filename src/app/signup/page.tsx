@@ -3,19 +3,39 @@ import React, { useState } from 'react';
 
 const SignupForm = () => {
   const [formData, setFormData] = useState({
-    studentId: '',
+    sid: '',
     name: '',
     email: '',
     password: '',
     batch: '',
-    department: '',
+    dept: '',
     role: '',
     number: ''
   });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e: { preventDefault: () => void; }) => {
     e.preventDefault();
-    console.log(formData);
+    
+     try {
+      const response = await fetch('http://localhost:8080/users', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData)
+      });
+      console.log(response); 
+      if (response.ok) {
+        const result = await response.json();
+        console.log('Success:', result);
+        // Reset form
+       
+      } else {
+        console.error('Error:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
   };
 
   return (
@@ -50,10 +70,10 @@ const SignupForm = () => {
               <label className="block text-sm font-medium text-gray-700 mb-1">Student / Teacher ID</label>
               <input
                 type="text"
-                className="w-full p-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm transition-all hover:border-blue-400"
+                className="w-full p-3 bg-white text-black border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm transition-all hover:border-blue-400"
                 placeholder="Enter your student ID"
-                value={formData.studentId}
-                onChange={(e) => setFormData({...formData, studentId: e.target.value})}
+                value={formData.sid}
+                onChange={(e) => setFormData({...formData, sid: e.target.value})}
               />
             </div>
 
@@ -62,7 +82,7 @@ const SignupForm = () => {
               <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
               <input
                 type="text"
-                className="w-full p-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm transition-all hover:border-blue-400"
+                className="w-full p-3 bg-white text-black border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm transition-all hover:border-blue-400"
                 placeholder="Enter your full name"
                 value={formData.name}
                 onChange={(e) => setFormData({...formData, name: e.target.value})}
@@ -74,7 +94,7 @@ const SignupForm = () => {
               <label className="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
               <input
                 type="email"
-                className="w-full p-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm transition-all hover:border-blue-400"
+                className="w-full p-3 bg-white text-black border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm transition-all hover:border-blue-400"
                 placeholder="Enter your email"
                 value={formData.email}
                 onChange={(e) => setFormData({...formData, email: e.target.value})}
@@ -86,7 +106,7 @@ const SignupForm = () => {
               <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
               <input
                 type="password"
-                className="w-full p-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm transition-all hover:border-blue-400"
+                className="w-full p-3 bg-white text-black border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm transition-all hover:border-blue-400"
                 placeholder="Enter your password"
                 value={formData.password}
                 onChange={(e) => setFormData({...formData, password: e.target.value})}
@@ -98,7 +118,7 @@ const SignupForm = () => {
               <label className="block text-sm font-medium text-gray-700 mb-1">Batch</label>
               <input
                 type="text"
-                className="w-full p-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm transition-all hover:border-blue-400"
+                className="w-full p-3 bg-white text-black border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm transition-all hover:border-blue-400"
                 placeholder="Enter your batch"
                 value={formData.batch}
                 onChange={(e) => setFormData({...formData, batch: e.target.value})}
@@ -109,9 +129,9 @@ const SignupForm = () => {
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Department</label>
               <select
-                className="w-full p-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm transition-all hover:border-blue-400"
-                value={formData.department}
-                onChange={(e) => setFormData({...formData, department: e.target.value})}
+                className="w-full p-3 bg-white text-black border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm transition-all hover:border-blue-400"
+                value={formData.dept}
+                onChange={(e) => setFormData({...formData, dept: e.target.value})}
               >
                 <option value="">Select Department</option>
                 <option value="CSE">CSE</option>
@@ -125,7 +145,7 @@ const SignupForm = () => {
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Role</label>
               <select
-                className="w-full p-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm transition-all hover:border-blue-400"
+                className="w-full p-3 bg-white text-black border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm transition-all hover:border-blue-400"
                 value={formData.role}
                 onChange={(e) => setFormData({...formData, role: e.target.value})}
               >
@@ -140,7 +160,7 @@ const SignupForm = () => {
               <label className="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
               <input
                 type="tel"
-                className="w-full p-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm transition-all hover:border-blue-400"
+                className="w-full p-3 bg-white text-black border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm transition-all hover:border-blue-400"
                 placeholder="Enter your phone number"
                 value={formData.number}
                 onChange={(e) => setFormData({...formData, number: e.target.value})}
